@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.johnf.mydsl1
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.johnf.mydsl1; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.antlr.runtime,
+ org.eclipse.xtext.xbase.lib
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.johnf.mydsl1,
+ org.johnf.mydsl1.services,
+ org.johnf.mydsl1.myDsl,
+ org.johnf.mydsl1.myDsl.impl,
+ org.johnf.mydsl1.myDsl.util,
+ org.johnf.mydsl1.serializer,
+ org.johnf.mydsl1.parser.antlr,
+ org.johnf.mydsl1.parser.antlr.internal,
+ org.johnf.mydsl1.validation,
+ org.johnf.mydsl1.scoping,
+ org.johnf.mydsl1.generator,
+ org.johnf.mydsl1.formatting

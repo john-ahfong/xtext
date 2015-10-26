@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.johnf.mydsl1.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.johnf.mydsl1.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.johnf.mydsl1;visibility:=reexport,
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.ui,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtext.xbase.lib
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.johnf.mydsl1.ui.quickfix,
+ org.johnf.mydsl1.ui.contentassist,
+ org.johnf.mydsl1.ui.contentassist.antlr
+Bundle-Activator: org.johnf.mydsl1.ui.internal.MyDslActivator
