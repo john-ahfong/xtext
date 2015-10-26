@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.johnf.mydsl2/src-gen" editDirectory="/org.johnf.mydsl2.edit/src"
+    editorDirectory="/org.johnf.mydsl2.editor/src" modelPluginID="org.johnf.mydsl2"
+    forceOverwrite="true" modelName="MyDsl" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="6.0" copyrightFields="false" editPluginID="org.johnf.mydsl2.edit"
+    editorPluginID="org.johnf.mydsl2.editor" runtimeVersion="2.10">
+  <genPackages prefix="MyDsl" basePackage="org.johnf.mydsl2" disposableProviderFactory="true"
+      fileExtensions="mydsl" ecorePackage="MyDsl.ecore#/">
+    <genClasses ecoreClass="MyDsl.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Model/systems"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Model/builtInTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Model/hiddenBuiltInTypes"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//System"/>
+    <genClasses ecoreClass="MyDsl.ecore#//DefinitionImport">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MyDsl.ecore#//DefinitionImport/definition"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//Definition"/>
+    <genClasses ecoreClass="MyDsl.ecore#//Partition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Partition/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Partition/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Partition/dataTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Partition/imports"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//CrossReferenceTarget">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//CrossReferenceTarget/inactive"/>
+      <genOperations ecoreOperation="MyDsl.ecore#//CrossReferenceTarget/getFQN"/>
+      <genOperations ecoreOperation="MyDsl.ecore#//CrossReferenceTarget/getContainerFQN"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//DataType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//DataType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//DataType/description"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//Entity">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Entity/fields"/>
+    </genClasses>
+    <genClasses ecoreClass="MyDsl.ecore#//BuiltInType"/>
+    <genClasses ecoreClass="MyDsl.ecore#//Field">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Field/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MyDsl.ecore#//Field/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Field/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Field/lower"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Field/upperUnlimited"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MyDsl.ecore#//Field/upper"/>
+      <genOperations ecoreOperation="MyDsl.ecore#//Field/getParent"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

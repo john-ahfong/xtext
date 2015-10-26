@@ -1,0 +1,106 @@
+/* 
+ * This transformation of the DPM Ecore model is invoked
+ * after Xtext has inferred the Ecore model but before
+ * Java code is being generated from the Ecore model.
+ */
+import ecore;
+ 
+process(xtext::GeneratedMetamodel this) :
+     ePackage.process();
+ 
+process(EPackage this) :
+     eClassifiers.process();
+ 
+process(EClassifier this) :
+     null;
+ 
+process(EClass this) :  
+	switch (name) {
+		case 'Model': (eStructuralFeatures.add(
+			newReference('builtInTypes', ePackage.getEClassifier("BuiltInType"), true, true, true)) ->
+			findEReference("builtInFunctions").setTransient(true) ->
+			eStructuralFeatures.add(newReference('hiddenBuiltInTypes', ePackage.getEClassifier("BuiltInType"), true, true, true))
+			)
+		case 'System':
+			(
+				// move 'imports' reference up to ModelLevel:
+				removeReference('imports')
+			)			
+		case 'Partition':
+			(
+				//moved to from System
+				newReference('imports', ePackage.getEClassifier("DefinitionImport"), true, true, false)
+			)				
+		case 'Field':
+			(
+			findEAttribute("lower").setDefaultValueLiteral("1") -> 
+			findEAttribute("upper").setDefaultValueLiteral("1") ->
+			addOperation("getParent", ePackage.getEClassifier("Entity"), false)
+			 )
+		case 'CrossReferenceTarget': (eStructuralFeatures.add(
+			newAttribute('inactive', getEcoreDataType("EBoolean"), false, true)) ->
+			addOperation("getFQN", getEcoreDataType("EString"), false) ->
+			addOperation("getContainerFQN", getEcoreDataType("EString"), false))			 
+	default: null
+	};
+
+		
+// Use this for Ecore datatypes (EString, EInt ...)
+create EAttribute newAttribute(EClass owner, String name, EClassifier type, Boolean many, Boolean transient) :
+	setName(name) -> setEType(type) -> setUpperBound(many ? -1 : 1) -> setTransient(transient) -> owner.eStructuralFeatures.add(this);
+
+create EAttribute newStringAttribute(EClass owner, String name, String defaultValue) :
+	setName(name) -> setEType(getEcoreDataType("EString")) -> setUpperBound(1) -> setDefaultValueLiteral(defaultValue) -> setTransient(false) -> owner.eStructuralFeatures.add(this);
+
+
+// Use this for user-defined EClasses inside or outside the model.
+create EReference newReference(EClass owner, String name, EClassifier type, Boolean containment, Boolean many, Boolean transient) :
+	setName(name) -> setEType(type) -> setUpperBound(many ? -1 : 1) -> setContainment(containment) -> setTransient(transient) -> owner.eStructuralFeatures.add(this);
+
+create EReference this createBackReference(String name, EClass etype, String refName) :
+	this.setName(name) ->
+	this.setEType(etype) ->
+	this.setLowerBound(0) ->
+	this.setUpperBound(-1) ->
+	this.setEOpposite(etype.findEReference(refName))
+;
+
+removeReference(EClass this, String name) :
+	eStructuralFeatures.remove(eStructuralFeatures.selectFirst(e|e.name==name));
+
+// Operations
+create EOperation newOperation(EClass owner, String name, EClassifier type, Boolean many) :
+	setName(name) -> setEType(type) -> setUpperBound(many ? -1 : 1) -> owner.eOperations.add(this);
+
+/*
+ * Add an new EOperation that has an annotation that defines what the body
+ * of the generated method implementation should look like. It should delegate
+ * to a static method in a Helper class both of which are not generated.
+ */
+addOperation(EClass this, String name, EClassifier type, Boolean many) :
+	let op  = newOperation(name, type, many) :
+		newDelegatingBodyAnnotation(op);create EAnnotation newDelegatingBodyAnnotation(EOperation op) :
+	let d = new EStringToStringMapEntry :
+		setSource("http://www.eclipse.org/emf/2002/GenModel") ->
+		d.setKey("body") ->
+		d.setValue((op.eType != null ? "return " : "") + op.delegateMethodName() + "(this);") ->
+		details.add(d) ->
+		op.eAnnotations.add(this)
+;
+ 
+delegateMethodName(EOperation this) :
+	"org.johnf.mydsl2.myDsl.impl." + eContainingClass.name + "Helper." +	name
+;
+
+EDataType getEcoreDataType(String name) :
+    org::eclipse::emf::ecore::EcorePackage::eINSTANCE.getEClassifier(name);
+    
+EReference findEReference(EClass this, String refName):
+	this.eStructuralFeatures.typeSelect(EReference).selectFirst(e|e.name == refName);
+	
+EAttribute findEAttribute(EClass this, String attrName):
+	this.eStructuralFeatures.typeSelect(EAttribute).selectFirst(e|e.name == attrName);
+
+EClass findEClass(EPackage pkg, String clsName) :
+	pkg.eClassifiers.typeSelect(ecore::EClass).selectFirst(e|e.name == clsName);
+ 
