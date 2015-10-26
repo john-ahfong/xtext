@@ -1,0 +1,53 @@
+grammar org.johnf.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.johnf.org/MyDsl"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Model:
+	'workspace' name=ID ';'
+	('description' description=STRING ';')?
+	(	
+			dataTypes+=(Entity)
+	)*
+	; 
+		
+// make sure to have a look at DecisionPointDefaultTerminalConverters to understand how this is
+// correctly mapped to java objects and back again
+terminal DATE returns ecore::EDate: '0'..'9''0'..'9''0'..'9''0'..'9' '-' '0'..'9''0'..'9' '-' '0'..'9''0'..'9';
+terminal INT returns ecore::EInt: ('-')? ('0'..'9')+;
+terminal DECIMAL returns ecore::EBigDecimal: 
+		'-'? ('0'..'9')+ '.' ('0'..'9')+;
+      
+FQN: // fully qualified name
+	ID ('.' ID)*
+	;
+
+//
+// Data Types
+//
+DataType:
+	BuiltInType | Entity
+	;
+
+Entity :
+	'entity' name=ID '{'
+		('description' description=STRING ';')?
+		(fields+=Field)*  // MULTI-VALIDATION warn if fields.size==0
+	'}'
+	;
+
+	
+// Only instantiated "behind the scenes", i.e. no keyword, not called as a rule
+BuiltInType:
+	name=ID description=STRING
+	;
+		
+Field : 
+	name=ID ':' type=[DataType|FQN]
+	(	('description' description=STRING ';')?
+		('[' lower=INT ',' (upperUnlimited?='*' | upper=INT) ']' ';')?
+		// default values: lower=1 and upper=1 set via PostProcessor
+	|	';'
+	)
+	;
