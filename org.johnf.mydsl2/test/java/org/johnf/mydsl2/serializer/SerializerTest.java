@@ -11,12 +11,22 @@ import org.johnf.mydsl2.myDsl.Field;
 import org.johnf.mydsl2.myDsl.Model;
 import org.johnf.mydsl2.myDsl.MyDslFactory;
 import org.johnf.mydsl2.serializer.MyDslSerialiserContext.ValidationType;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 
 public class SerializerTest {
 	private static final MyDslFactory FACTORY = MyDslFactory.eINSTANCE;
 	private final MyDslSerialiserContext context = new MyDslSerialiserContext();
-
+	@Rule 
+	public TestName testName = new TestName();
+	
+	@Before
+	public void printTestName() throws Exception {
+		System.out.println(testName.getMethodName());
+	}
+	
 	@Test
 	public void test_add_1000_entities_with_3_fields_each_to_emptyModel() throws Exception {
 		int numEntities = 1000;

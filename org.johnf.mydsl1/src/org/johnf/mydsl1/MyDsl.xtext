@@ -60,7 +60,7 @@ DataType:
 Entity :
 	'entity' name=ID '{'
 		('description' description=STRING ';')?
-		(fields+=Field)*  // MULTI-VALIDATION warn if fields.size==0
+		(fields+=Field)* 
 	'}'
 	;
 
